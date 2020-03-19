@@ -21,10 +21,10 @@ import com.example.crisisfridge.data.inventory.dao.RecipeIngredientsDao;
 import com.example.crisisfridge.data.inventory.dao.RecipeDao;
 import com.example.crisisfridge.data.inventory.dao.ProductTypeDao;
 import com.example.crisisfridge.data.inventory.dao.ShoppingListDao;
-import com.example.crisisfridge.data.inventory.entity.PantryEntity;
+import com.example.crisisfridge.data.inventory.entity.FridgeItemEntity;
 import com.example.crisisfridge.data.inventory.entity.ProductTypeEntity;
 import com.example.crisisfridge.data.inventory.entity.RecipeEntity;
-import com.example.crisisfridge.data.inventory.entity.RecipeIngredientsEntity;
+import com.example.crisisfridge.data.inventory.entity.RecipeIngredientEntity;
 import com.example.crisisfridge.data.inventory.entity.ShoppingListEntity;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -37,15 +37,12 @@ import java.io.Reader;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-
-
-
 @Database(entities =
         {
-                PantryEntity.class,
+                FridgeItemEntity.class,
                 ProductTypeEntity.class,
                 RecipeEntity.class,
-                RecipeIngredientsEntity.class,
+                RecipeIngredientEntity.class,
                 ShoppingListEntity.class,
         },
         version = 1)
@@ -61,7 +58,7 @@ public abstract class LocalDB extends RoomDatabase {
     public abstract RecipeIngredientsDao getRecipeIngredientsDao();
     public abstract ShoppingListDao getShoppingListDao();
 
-    private static String DB_NAME = "crisis_fridge";
+    private static final String DB_NAME = "crisis_fridge";
     private static LocalDB INSTANCE;
 
     public static LocalDB getDatabase(final Context context) {
