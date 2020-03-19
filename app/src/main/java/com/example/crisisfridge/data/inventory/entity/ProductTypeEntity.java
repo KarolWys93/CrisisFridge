@@ -6,33 +6,21 @@
 
 package com.example.crisisfridge.data.inventory.entity;
 
-
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.example.crisisfridge.data.model.inventory.interfaces.ProductType;
-
-import java.util.Objects;
-
 
 @Entity(tableName = "product_type")
 public class ProductTypeEntity implements ProductType {
 
     @PrimaryKey
     private int id;
-    @ColumnInfo(name = "name")
     private String name;
-    @ColumnInfo(name = "expiration")
-    private int expiration;
-    @ColumnInfo(name = "description")
-    private int description;
 
-    public ProductTypeEntity(int id, String name, int expiration, int description) {
+    public ProductTypeEntity(int id, String name) {
         this.id = id;
         this.name = name;
-        this.expiration = expiration;
-        this.description = description;
     }
 
     @Override
@@ -46,29 +34,20 @@ public class ProductTypeEntity implements ProductType {
     }
 
     @Override
-    public int getExpiration() {
-        return expiration;
-    }
-
-    @Override
-    public int getDescription() {
-        return description;
-    }
-
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         ProductTypeEntity that = (ProductTypeEntity) o;
-        return id == that.id &&
-                name == that.name &&
-                expiration == that.expiration &&
-                description == that.description;
+
+        if (id != that.id) return false;
+        return name != null ? name.equals(that.name) : that.name == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, expiration, description);
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
     }
 }

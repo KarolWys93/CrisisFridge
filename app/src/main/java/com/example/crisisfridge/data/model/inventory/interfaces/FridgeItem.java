@@ -1,11 +1,9 @@
 package com.example.crisisfridge.data.model.inventory.interfaces;
 
-public interface ShoppingList {
+public interface FridgeItem {
     int getId();
 
-    int getProductTypeId();
+    int getProductId();
 
     float getQuantity();
-
-    boolean isBought();
 }

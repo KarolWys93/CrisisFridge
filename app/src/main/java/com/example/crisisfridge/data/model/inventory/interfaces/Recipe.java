@@ -1,9 +1,10 @@
 package com.example.crisisfridge.data.model.inventory.interfaces;
 
 public interface Recipe {
-    public int getRecipeId();
 
-    public String getName();
+    int getId();
 
-    public String getDescription();
+    String getName();
+
+    String getDescription();
 }
