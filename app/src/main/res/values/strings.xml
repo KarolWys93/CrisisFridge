@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Crisis Fridge</string>
+    <string name="inv_item_title">Enter a name for inventory item.</string>
+    <string name="inv_item_title_label">Title</string>
+    <string name="inv_item_details_label">Details</string>
+    <string name="inv_item_bought_label">Bought</string>
+    <string name="call_police">Call Police</string>
+    <string name="inv_item_bought">Inventory item bought</string>
 </resources>
