@@ -1,4 +1,4 @@
-package com.example.crisisfridge.data.database.mocks;
+package com.example.crisisfridge.data.model;
 
 import com.example.crisisfridge.data.database.entity.FridgeItemEntity;
 import com.example.crisisfridge.data.database.entity.ProductTypeEntity;
@@ -9,6 +9,7 @@ import com.example.crisisfridge.data.database.entity.ShoppingListEntity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class DatabaseMock {
@@ -71,5 +72,15 @@ public class DatabaseMock {
 
     public List<ShoppingListEntity> getShoppingList() {
         return shoppingList;
+    }
+
+    public static int maxFromList(Collection<Integer> ids){
+        int maxValue = 1;
+        for (Integer id:ids) {
+            if (id > maxValue){
+                maxValue = id;
+            }
+        }
+        return maxValue;
     }
 }

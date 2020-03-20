@@ -10,9 +10,9 @@ import androidx.lifecycle.LiveData;
 
 public interface IFridgeItemRepository {
 
-    LiveData<List<FridgeItem>> getFridgeItemList();
+    List<FridgeItem> getFridgeItemList();
 
-    void addNewItemToFridge(ProductType productType, int quantity, LocalDate expirationDate);
+    void addNewItemToFridge(ProductType productType, float quantity, LocalDate expirationDate);
 
     void removeItemFromFridge(FridgeItem fridgeItem);
 

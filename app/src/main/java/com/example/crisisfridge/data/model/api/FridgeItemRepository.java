@@ -2,11 +2,9 @@ package com.example.crisisfridge.data.model.api;
 
 import android.util.Log;
 
-import com.example.crisisfridge.data.LocalDB;
-import com.example.crisisfridge.data.database.dao.FridgeDao;
-import com.example.crisisfridge.data.database.dao.ProductTypeDao;
+
 import com.example.crisisfridge.data.database.entity.FridgeItemEntity;
-import com.example.crisisfridge.data.database.entity.ProductTypeEntity;
+import com.example.crisisfridge.data.model.DatabaseMock;
 import com.example.crisisfridge.data.model.dataModel.FridgeItem;
 import com.example.crisisfridge.data.model.dataModel.FridgeItemImpl;
 import com.example.crisisfridge.data.model.dataModel.ProductType;
@@ -16,95 +14,66 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 
 public class FridgeItemRepository implements IFridgeItemRepository {
 
     private final String TAG = "FridgeItemRepository";
-    private FridgeDao fridgeDao;
-    private ProductTypeDao productTypeDao;
-
-    private LiveData<List<FridgeItemEntity>> fridgeItemEntityLiveData;
-    private MediatorLiveData<List<FridgeItem>> mergedFridgeItemsLiveData;
-    private MutableLiveData<List<Integer>> productTypeIdsLiveData;
-
-    private MutableLiveData<FridgeItemEntity> addItemTrigger;
-    private MediatorLiveData<FridgeItemEntity> newFridgeItem;
-
-    FridgeItemRepository(LocalDB database) {
-        this.fridgeDao = database.getFridgeDao();
-        this.productTypeDao = database.getProductTypeDao();
 
 
-        createFridgeItemFlow();
-        createAddFridgeItemFlow();
+    private Map<Integer, FridgeItemEntity> fridgeItemEntityMap;
+    private IProductTypeRepository productTypeRepository;
+
+
+    FridgeItemRepository(DatabaseMock databaseMock) {
+        fridgeItemEntityMap = new HashMap<>();
+        for (FridgeItemEntity entity : databaseMock.getFridge()) {
+            fridgeItemEntityMap.put(entity.getId(), entity);
+        }
+        productTypeRepository = new RepositoryFactory(databaseMock).getProductTypeRepository();
     }
 
-    private void createFridgeItemFlow(){
-        fridgeItemEntityLiveData = fridgeDao.getAllFridgeItems();
-        productTypeIdsLiveData = new MutableLiveData<>();
-        mergedFridgeItemsLiveData = new MediatorLiveData<>();
-        mergedFridgeItemsLiveData.addSource(fridgeItemEntityLiveData, fridgeItemEntityList -> {
-            List<Integer> productTypeIdList = new ArrayList<>();
-            for (FridgeItemEntity entity : fridgeItemEntityList) {
-                productTypeIdList.add(entity.getProductId());
-            }
-            productTypeIdsLiveData.setValue(productTypeIdList);
-        });
-        mergedFridgeItemsLiveData.addSource(Transformations.switchMap(productTypeIdsLiveData, input -> productTypeDao.getProductTypeByIdList(input)), productTypeEntityList -> {
-            if (fridgeItemEntityLiveData.getValue() == null) return;
-            List<FridgeItem> fridgeItemList = new ArrayList<>();
-            Map<Integer, String> productNames = new HashMap<>();
-            for (ProductTypeEntity productTypeEntity:productTypeEntityList) {
-                productNames.put(productTypeEntity.getId(), productTypeEntity.getName());
-            }
-            for (FridgeItemEntity fridgeItemEntity:fridgeItemEntityLiveData.getValue()) {
-                FridgeItem fridgeItem = new FridgeItemImpl(
-                        fridgeItemEntity,
-                        productNames.get(fridgeItemEntity.getProductId())
-                );
-                fridgeItemList.add(fridgeItem);
-            }
-            mergedFridgeItemsLiveData.setValue(fridgeItemList);
-        });
-    }
 
-    private void createAddFridgeItemFlow(){
-        newFridgeItem = new MediatorLiveData<>();
-        addItemTrigger = new MutableLiveData<>();
-        newFridgeItem.addSource(addItemTrigger, fridgeDao::addNewItemToFridge);
+    @Override
+    public List<FridgeItem> getFridgeItemList() {
+
+        List<FridgeItem> resultList = new ArrayList<>();
+
+        for (FridgeItemEntity entity : fridgeItemEntityMap.values()) {
+            ProductType productType = productTypeRepository.getProductTypeById(entity.getProductId());
+            if (productType == null) continue;
+            resultList.add(new FridgeItemImpl(
+                    entity,
+                    productType.getName())
+            );
+        }
+        return resultList;
     }
 
     @Override
-    public LiveData<List<FridgeItem>> getFridgeItemList() {
-        return mergedFridgeItemsLiveData;
-    }
-
-    @Override
-    public void addNewItemToFridge(ProductType productType, int quantity, LocalDate expirationDate) {
+    public void addNewItemToFridge(ProductType productType, float quantity, LocalDate expirationDate) {
+        int newID = DatabaseMock.maxFromList(fridgeItemEntityMap.keySet()) + 1;
         FridgeItemEntity fridgeItemEntity = new FridgeItemEntity(
-                0,
+                newID,
                 productType.getId(),
                 quantity,
-                expirationDate.toEpochDay());
-        Log.d(TAG, "Add item to fridge: " + fridgeItemEntity);
-        addItemTrigger.setValue(fridgeItemEntity);
+                expirationDate.toEpochDay()
+        );
+        fridgeItemEntityMap.put(newID, fridgeItemEntity);
     }
 
     @Override
     public void removeItemFromFridge(FridgeItem fridgeItem) {
         Log.d(TAG, "Remove item from fridge " + fridgeItem);
-        fridgeDao.deleteItemFromFridge(createFridgeItemEntity(fridgeItem));
+        fridgeItemEntityMap.remove(fridgeItem.getId());
     }
 
     @Override
     public void editItemFromFridge(FridgeItem fridgeItem) {
         Log.d(TAG, "Update item in fridge " + fridgeItem);
-        fridgeDao.updateItemFromFridge(createFridgeItemEntity(fridgeItem));
+        FridgeItemEntity fridgeItemEntity = createFridgeItemEntity(fridgeItem);
+        fridgeItemEntityMap.put(fridgeItem.getId(), fridgeItemEntity);
     }
 
     @Override

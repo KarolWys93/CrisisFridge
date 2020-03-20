@@ -1,24 +1,22 @@
 package com.example.crisisfridge.data.model.api;
 
-import android.content.Context;
-
-import com.example.crisisfridge.data.LocalDB;
+import com.example.crisisfridge.data.model.DatabaseMock;
 
 public class RepositoryFactory implements IRepositoryFactory {
 
-    private Context context;
+    private DatabaseMock databaseMock;
 
-    public RepositoryFactory(Context context) {
-        this.context = context;
+    public RepositoryFactory(DatabaseMock databaseMock) {
+        this.databaseMock = databaseMock;
     }
 
     @Override
     public IProductTypeRepository getProductTypeRepository() {
-        return new ProductTypeRepository(LocalDB.getDatabase(context));
+        return new ProductTypeRepository(databaseMock);
     }
 
     @Override
     public IFridgeItemRepository getFridgeItemRepository() {
-        return new FridgeItemRepository(LocalDB.getDatabase(context));
+        return new FridgeItemRepository(databaseMock);
     }
 }

@@ -1,23 +1,11 @@
 package com.example.crisisfridge.data.database.entity;
 
-import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
-
 import com.example.crisisfridge.data.model.dataModel.ShoppingList;
 
-@Entity(tableName = "shopping_list",
-        foreignKeys = @ForeignKey(
-                entity = ProductTypeEntity.class,
-                parentColumns = "id",
-                childColumns = "productTypeId",
-                onDelete = ForeignKey.CASCADE),
-        indices = @Index("productTypeId")
-)
+
 public class ShoppingListEntity implements ShoppingList {
 
-    @PrimaryKey(autoGenerate = true)
+
     private int id;
     private int productTypeId;
     private float quantity;
@@ -30,22 +18,22 @@ public class ShoppingListEntity implements ShoppingList {
         this.bought = bought;
     }
 
-    @Override
+
     public int getId() {
         return id;
     }
 
-    @Override
+
     public int getProductTypeId() {
         return productTypeId;
     }
 
-    @Override
+
     public float getQuantity() {
         return quantity;
     }
 
-    @Override
+
     public boolean isBought() {
         return bought;
     }

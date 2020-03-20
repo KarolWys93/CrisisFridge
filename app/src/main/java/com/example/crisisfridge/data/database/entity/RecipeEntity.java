@@ -1,14 +1,9 @@
 package com.example.crisisfridge.data.database.entity;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-import com.example.crisisfridge.data.model.dataModel.Recipe;
+public class RecipeEntity {
 
-@Entity(tableName = "recipe")
-public class RecipeEntity implements Recipe {
 
-    @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
     private String description;
@@ -19,22 +14,18 @@ public class RecipeEntity implements Recipe {
         this.description = description;
     }
 
-    @Override
     public int getId() {
         return id;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -46,7 +37,6 @@ public class RecipeEntity implements Recipe {
         return description != null ? description.equals(that.description) : that.description == null;
     }
 
-    @Override
     public int hashCode() {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);

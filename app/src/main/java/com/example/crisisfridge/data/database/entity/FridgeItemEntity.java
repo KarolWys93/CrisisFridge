@@ -1,23 +1,7 @@
 package com.example.crisisfridge.data.database.entity;
 
-import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
-
-import com.example.crisisfridge.data.model.dataModel.FridgeItem;
-
-@Entity(tableName = "fridge",
-        foreignKeys = @ForeignKey(
-                entity = ProductTypeEntity.class,
-                parentColumns = "id",
-                childColumns = "productId",
-                onDelete = ForeignKey.CASCADE),
-        indices = @Index("productId")
-)
 public class FridgeItemEntity {
 
-    @PrimaryKey(autoGenerate = true)
     private int id;
     private int productId;
     private float quantity;
