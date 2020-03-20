@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">Crisis Fridge</string>
     <string name="inv_item_title">Enter a name for inventory item.</string>
-    <string name="inv_item_title_label">Title</string>
+    <string name="product_edit_title">Edit Product</string>
+    <string name="inv_item_title_label">Product Name</string>
     <string name="inv_item_details_label">Details</string>
+    <string name="inv_item_expiration_date_label">Expiration Date</string>
+    <string name="inv_item_quantity_label">Quantity</string>
     <string name="inv_item_bought_label">Bought</string>
+    <string name="inv_item_add_label">Add Product</string>
+    <string name="inv_item_confirm_edit_label">Confirm change</string>
     <string name="call_police">Call Police</string>
     <string name="inv_item_bought">Inventory item bought</string>
 </resources>

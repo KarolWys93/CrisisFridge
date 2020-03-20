@@ -5,30 +5,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crisisfridge.R;
+import com.example.crisisfridge.model.InventoryItem;
+import com.example.crisisfridge.model.InventoryItemI;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ProductListFragment extends Fragment {
 
-    private RecyclerView mCrimeRecyclerView;
-    private CrimeAdapter mAdapter;
+    private RecyclerView invItemRecyclerView;
+    private InvItemAdapter invItemAdapter;
+    private static final int REQUEST_EDIT = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_product_list, container, false);
 
-        mCrimeRecyclerView = view.findViewById(R.id.crime_recycler_view);
-        mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        invItemRecyclerView = view.findViewById(R.id.crime_recycler_view);
+        invItemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         updateUI();
 
@@ -36,94 +41,82 @@ public class ProductListFragment extends Fragment {
     }
 
     private void updateUI() {
-        CrimeLab crimeLab = CrimeLab.get(getActivity());
-        List<Crime> crimes = crimeLab.getCrimes();
-        mAdapter = new CrimeAdapter(crimes);
-        mCrimeRecyclerView.setAdapter(mAdapter);
+        ArrayList<InventoryItemI> inventoryItems = new ArrayList<>();
+        inventoryItems.add(new InventoryItem("s",0.9f, new Date()));
+        invItemAdapter = new InvItemAdapter(inventoryItems);
+        invItemRecyclerView.setAdapter(invItemAdapter);
     }
 
-    private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class ProductHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private Crime mCrime;
-        private TextView mTitleTextView;
-        private TextView mDateTextView;
-        private ImageView mSolvedImageVIew;
+        private InventoryItemI inventoryItem;
+        private TextView nameTextView;
+        private TextView dateTextView;
+        private TextView quantityTextView;
 
-        public CrimeHolder(View view) {
+        public ProductHolder(View view) {
             super(view);
             itemView.setOnClickListener(this);
 
-            mTitleTextView = itemView.findViewById(R.id.inv_item_title);
-            mDateTextView = itemView.findViewById(R.id.details);
-            mSolvedImageVIew = itemView.findViewById(R.id.inv_item_bought);
+            nameTextView = itemView.findViewById(R.id.item_name);
+            quantityTextView = itemView.findViewById(R.id.item_quantity);
+            dateTextView = itemView.findViewById(R.id.item_expiration_date);
         }
 
-        public void bind(Crime crime) {
-            mCrime = crime;
-            mTitleTextView.setText(mCrime.getTitle());
+        public void bind(InventoryItemI inventoryItem) {
+            this.inventoryItem = inventoryItem;
+            nameTextView.setText(this.inventoryItem.getName());
             SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMM dd, yyyy");
-            Date date = mCrime.getDate();
+            Date date = this.inventoryItem.getDate();
             String dateStr = formatter.format(date);
-            mDateTextView.setText(dateStr);
-            mSolvedImageVIew.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
-//            if(this.getItemViewType() == 1){
-//                Button b = itemView.findViewById(R.id.contact_police);
-//                b.setOnClickListener(e -> {
-//                    Toast.makeText(getActivity(), R.string.call_police,
-//                            Toast.LENGTH_SHORT).show();
-//                });
-//            }
+            dateTextView.setText(dateStr);
+            quantityTextView.setText(String.valueOf(inventoryItem.getQuantity()));
         }
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(), mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT).show();
+            FragmentManager fragmentManager = getFragmentManager();
+            ProductEditFragment productEditFragment = ProductEditFragment.newInstance(
+                    inventoryItem.getName(),
+                    inventoryItem.getQuantity(),
+                    inventoryItem.getDate()
+            );
+            productEditFragment.setTargetFragment(ProductListFragment.this, REQUEST_EDIT);
+            productEditFragment.show(fragmentManager,"Edit Product");
         }
     }
 
-    private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
-        private List<Crime> mCrimes;
+    private class InvItemAdapter extends RecyclerView.Adapter<ProductHolder> {
+        private List<InventoryItemI> inventoryItemList;
 
-        public CrimeAdapter(List<Crime> crimes) {
-            mCrimes = crimes;
+        public InvItemAdapter(List<InventoryItemI> inventoryItemList) {
+            this.inventoryItemList = inventoryItemList;
         }
 
         @NonNull
         @Override
-        public CrimeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view;
             int layout;
 
-//            if(viewType == 0){
-//                layout = R.layout.list_item_crime;
-//            }
-//            else {
-//                layout = R.layout.list_item_crime_police;
-//            }
-
-            layout = R.layout.list_item_crime;
+            layout = R.layout.list_item_product;
 
             view = layoutInflater.inflate(layout, parent, false);
 
-            return new CrimeHolder(view);
+            return new ProductHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull CrimeHolder holder, int position) {
-            Crime crime = mCrimes.get(position);
-            holder.bind(crime);
+        public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
+            InventoryItemI inventoryItem = inventoryItemList.get(position);
+            holder.bind(inventoryItem);
         }
 
         @Override
         public int getItemCount() {
-            return mCrimes.size();
+            return inventoryItemList.size();
         }
 
-        @Override
-        public int getItemViewType(int position){
-            Crime crime = mCrimes.get(position);
-            return crime.isRequiresPolice() ? 1 : 0;
-        }
     }
 }

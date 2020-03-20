@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:padding="8dp">
         <TextView
-            android:id="@+id/inv_item_title"
+            android:id="@+id/inv_item_name_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Crime Title"/>

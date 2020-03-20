@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
@@ -15,11 +14,13 @@ import androidx.fragment.app.Fragment;
 import com.example.crisisfridge.R;
 import com.example.crisisfridge.model.InventoryItem;
 
-public class ProductFragment extends Fragment {
+public class ProductAddFragment extends Fragment {
     private InventoryItem inventoryItem;
-    private EditText mTitleField;
-    private Button mDateButton;
-    private CheckBox mSolvedCheckBox;
+    private EditText productNameField;
+    private EditText productDateField;
+    private EditText productQuantityField;
+    private Button addProduct;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -30,9 +31,12 @@ public class ProductFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_product, container, false);
-        mTitleField = view.findViewById(R.id.inv_item_title);
-        mTitleField.addTextChangedListener(new TextWatcher() {
+        View view = inflater.inflate(R.layout.fragment_add_product, container, false);
+        productNameField = view.findViewById(R.id.inv_item_name_edit);
+        addProduct = view.findViewById(R.id.edit_inv_item);
+        productDateField = view.findViewById(R.id.inv_item_expiration_date_edit);
+        productQuantityField = view.findViewById(R.id.inv_item_quantity_edit);
+        productNameField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 //This space intentionally left blank
@@ -40,24 +44,12 @@ public class ProductFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                inventoryItem.setTitle(s.toString());
+                inventoryItem.setName(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 //This one too
-            }
-        });
-
-        mDateButton = view.findViewById(R.id.details);
-        mDateButton.setText(inventoryItem.getDate().toString());
-        mDateButton.setEnabled(false);
-
-        mSolvedCheckBox = view.findViewById(R.id.inv_item_bought);
-        mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                inventoryItem.setSolved(isChecked);
             }
         });
 
