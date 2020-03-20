@@ -1,34 +1,9 @@
-package com.example.crisisfridge.data.inventory.entity;
-
-import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
-
-import com.example.crisisfridge.data.model.inventory.interfaces.ProductType;
-import com.example.crisisfridge.data.model.inventory.interfaces.RecipeIngredient;
+package com.example.crisisfridge.data.database.entity;
 
 
-@Entity(tableName = "recipe_ingredients",
-        foreignKeys = {
-                @ForeignKey(
-                        entity = RecipeEntity.class,
-                        parentColumns = "id",
-                        childColumns = "recipeId",
-                        onDelete = ForeignKey.CASCADE),
-                @ForeignKey(
-                        entity = ProductTypeEntity.class,
-                        parentColumns = "id",
-                        childColumns = "productTypeId",
-                        onDelete = ForeignKey.CASCADE)},
-        indices = {
-                @Index("recipeId"),
-                @Index("productTypeId")
-        }
-)
-public class RecipeIngredientEntity implements RecipeIngredient {
+public class RecipeIngredientEntity {
 
-    @PrimaryKey
+
     private int id;
     private int recipeId;
     private int productTypeId;
@@ -41,22 +16,22 @@ public class RecipeIngredientEntity implements RecipeIngredient {
         this.quantity = quantity;
     }
 
-    @Override
+
     public int getId() {
         return id;
     }
 
-    @Override
+
     public int getRecipeId() {
         return recipeId;
     }
 
-    @Override
+
     public int getProductTypeId() {
         return productTypeId;
     }
 
-    @Override
+
     public float getQuantity() {
         return quantity;
     }
