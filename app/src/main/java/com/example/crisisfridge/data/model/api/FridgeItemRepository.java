@@ -73,7 +73,9 @@ public class FridgeItemRepository implements IFridgeItemRepository {
     public void editItemFromFridge(FridgeItem fridgeItem) {
         Log.d(TAG, "Update item in fridge " + fridgeItem);
         FridgeItemEntity fridgeItemEntity = createFridgeItemEntity(fridgeItem);
-        fridgeItemEntityMap.put(fridgeItem.getId(), fridgeItemEntity);
+        if (fridgeItemEntityMap.containsKey(fridgeItem.getId())) {
+            fridgeItemEntityMap.put(fridgeItem.getId(), fridgeItemEntity);
+        }
     }
 
     @Override
