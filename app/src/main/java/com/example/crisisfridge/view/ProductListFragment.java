@@ -1,5 +1,7 @@
 package com.example.crisisfridge.view;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,7 +28,8 @@ public class ProductListFragment extends Fragment {
 
     private RecyclerView invItemRecyclerView;
     private InvItemAdapter invItemAdapter;
-    private static final int REQUEST_EDIT = 0;
+    private static final int REQUEST_INV_ITEM = 0;
+    private ArrayList<InventoryItemI> inventoryItems = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,8 +45,8 @@ public class ProductListFragment extends Fragment {
     }
 
     private void updateUI() {
-        ArrayList<InventoryItemI> inventoryItems = new ArrayList<>();
         inventoryItems.add(new InventoryItem("s",0.9f, new Date()));
+
         invItemAdapter = new InvItemAdapter(inventoryItems);
         invItemRecyclerView.setAdapter(invItemAdapter);
     }
@@ -73,17 +77,22 @@ public class ProductListFragment extends Fragment {
             quantityTextView.setText(String.valueOf(inventoryItem.getQuantity()));
         }
 
+
         @Override
         public void onClick(View v) {
             FragmentManager fragmentManager = getFragmentManager();
             ProductEditFragment productEditFragment = ProductEditFragment.newInstance(
                     inventoryItem.getName(),
                     inventoryItem.getQuantity(),
-                    inventoryItem.getDate()
+                    inventoryItem.getDate(),
+                    getAdapterPosition()
             );
-            productEditFragment.setTargetFragment(ProductListFragment.this, REQUEST_EDIT);
+
+            productEditFragment.setTargetFragment(ProductListFragment.this, REQUEST_INV_ITEM);
             productEditFragment.show(fragmentManager,"Edit Product");
         }
+
+
     }
 
     private class InvItemAdapter extends RecyclerView.Adapter<ProductHolder> {
@@ -113,9 +122,33 @@ public class ProductListFragment extends Fragment {
             holder.bind(inventoryItem);
         }
 
+
+
+
         @Override
         public int getItemCount() {
             return inventoryItemList.size();
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == REQUEST_INV_ITEM) {
+            String name = (String) data.getSerializableExtra(
+                    ProductEditFragment.EXTRA_INV_ITEM_NAME);
+            float quantity = (float) data.getSerializableExtra(
+                    ProductEditFragment.EXTRA_INV_ITEM_QUANTITY);
+            Date date = (Date) data.getSerializableExtra(
+                    ProductEditFragment.EXTRA_INV_ITEM_DATE);
+            int number = (int) data.getSerializableExtra(
+                    ProductEditFragment.EXTRA_INV_ITEM_NUMBER);
+            inventoryItems.set(number,new InventoryItem(name,quantity,date));
+            invItemAdapter.notifyDataSetChanged();
         }
 
     }
