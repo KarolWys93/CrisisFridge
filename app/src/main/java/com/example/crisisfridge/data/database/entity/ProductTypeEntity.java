@@ -4,17 +4,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package com.example.crisisfridge.data.inventory.entity;
+package com.example.crisisfridge.data.database.entity;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-import com.example.crisisfridge.data.model.inventory.interfaces.ProductType;
 
-@Entity(tableName = "product_type")
-public class ProductTypeEntity implements ProductType {
+public class ProductTypeEntity {
 
-    @PrimaryKey
+
     private int id;
     private String name;
 
@@ -23,12 +19,12 @@ public class ProductTypeEntity implements ProductType {
         this.name = name;
     }
 
-    @Override
+
     public int getId() {
         return id;
     }
 
-    @Override
+
     public String getName() {
         return name;
     }

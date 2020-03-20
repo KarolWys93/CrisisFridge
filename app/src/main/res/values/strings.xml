@@ -10,6 +10,8 @@
     <string name="inv_item_bought_label">Bought</string>
     <string name="inv_item_add_label">Add Product</string>
     <string name="inv_item_confirm_edit_label">Confirm change</string>
-    <string name="call_police">Call Police</string>
     <string name="inv_item_bought">Inventory item bought</string>
+    <string name="shopping_list">Shopping list</string>
+    <string name="recipes">Recipes</string>
+    <string name="food">Food</string>
 </resources>

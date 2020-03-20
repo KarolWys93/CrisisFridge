@@ -1,4 +1,4 @@
-package com.example.crisisfridge.data.model.inventory.interfaces;
+package com.example.crisisfridge.data.model.dataModel;
 
 public interface RecipeIngredient {
     int getId();
