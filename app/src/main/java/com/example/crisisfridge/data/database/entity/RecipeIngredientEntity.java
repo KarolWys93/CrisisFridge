@@ -1,12 +1,11 @@
-package com.example.crisisfridge.data.inventory.entity;
+package com.example.crisisfridge.data.database.entity;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.example.crisisfridge.data.model.inventory.interfaces.ProductType;
-import com.example.crisisfridge.data.model.inventory.interfaces.RecipeIngredient;
+import com.example.crisisfridge.data.model.dataModel.RecipeIngredient;
 
 
 @Entity(tableName = "recipe_ingredients",

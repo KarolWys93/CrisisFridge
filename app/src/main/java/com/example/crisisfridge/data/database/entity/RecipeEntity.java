@@ -1,9 +1,9 @@
-package com.example.crisisfridge.data.inventory.entity;
+package com.example.crisisfridge.data.database.entity;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.crisisfridge.data.model.inventory.interfaces.Recipe;
+import com.example.crisisfridge.data.model.dataModel.Recipe;
 
 @Entity(tableName = "recipe")
 public class RecipeEntity implements Recipe {

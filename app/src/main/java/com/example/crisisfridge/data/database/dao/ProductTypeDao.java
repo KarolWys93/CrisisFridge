@@ -4,15 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package com.example.crisisfridge.data.inventory.dao;
+package com.example.crisisfridge.data.database.dao;
 
 
 import androidx.room.Dao;
 
 
 @Dao
-public interface ShoppingListDao {
+public interface ProductTypeDao {
 
 
 }
-

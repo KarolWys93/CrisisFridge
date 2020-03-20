@@ -1,4 +1,4 @@
-package com.example.crisisfridge.data.model.inventory.interfaces;
+package com.example.crisisfridge.data.model.dataModel;
 
 public interface FridgeItem {
     int getId();
@@ -6,4 +6,6 @@ public interface FridgeItem {
     int getProductId();
 
     float getQuantity();
+
+    long getExpirationDate();
 }

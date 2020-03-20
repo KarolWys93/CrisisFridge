@@ -4,12 +4,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package com.example.crisisfridge.data.inventory.entity;
+package com.example.crisisfridge.data.database.entity;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.crisisfridge.data.model.inventory.interfaces.ProductType;
+import com.example.crisisfridge.data.model.dataModel.ProductType;
 
 @Entity(tableName = "product_type")
 public class ProductTypeEntity implements ProductType {

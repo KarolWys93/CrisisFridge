@@ -16,16 +16,16 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.crisisfridge.data.inventory.dao.PantryDao;
-import com.example.crisisfridge.data.inventory.dao.RecipeIngredientsDao;
-import com.example.crisisfridge.data.inventory.dao.RecipeDao;
-import com.example.crisisfridge.data.inventory.dao.ProductTypeDao;
-import com.example.crisisfridge.data.inventory.dao.ShoppingListDao;
-import com.example.crisisfridge.data.inventory.entity.FridgeItemEntity;
-import com.example.crisisfridge.data.inventory.entity.ProductTypeEntity;
-import com.example.crisisfridge.data.inventory.entity.RecipeEntity;
-import com.example.crisisfridge.data.inventory.entity.RecipeIngredientEntity;
-import com.example.crisisfridge.data.inventory.entity.ShoppingListEntity;
+import com.example.crisisfridge.data.database.dao.PantryDao;
+import com.example.crisisfridge.data.database.dao.RecipeIngredientsDao;
+import com.example.crisisfridge.data.database.dao.RecipeDao;
+import com.example.crisisfridge.data.database.dao.ProductTypeDao;
+import com.example.crisisfridge.data.database.dao.ShoppingListDao;
+import com.example.crisisfridge.data.database.entity.FridgeItemEntity;
+import com.example.crisisfridge.data.database.entity.ProductTypeEntity;
+import com.example.crisisfridge.data.database.entity.RecipeEntity;
+import com.example.crisisfridge.data.database.entity.RecipeIngredientEntity;
+import com.example.crisisfridge.data.database.entity.ShoppingListEntity;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
