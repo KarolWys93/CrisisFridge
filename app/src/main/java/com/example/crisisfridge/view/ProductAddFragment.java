@@ -1,5 +1,10 @@
 package com.example.crisisfridge.view;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -7,58 +12,71 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.crisisfridge.R;
 import com.example.crisisfridge.model.InventoryItem;
 
-public class ProductAddFragment extends Fragment {
-    private InventoryItem inventoryItem;
-    private EditText productNameField;
-    private EditText productDateField;
-    private EditText productQuantityField;
-    private Button addProduct;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+public class ProductAddFragment extends ProductFragment {
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        inventoryItem = new InventoryItem();
+
+    private EditText inv_item_name_edit;
+    private EditText inv_item_quantity_edit;
+    private DatePicker inv_item_expiration_date_edit;
+
+    public static  ProductAddFragment newInstance (){
+        ProductAddFragment fragment = new ProductAddFragment();
+        return fragment;
     }
 
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_product, container, false);
-        productNameField = view.findViewById(R.id.inv_item_name_edit);
-        addProduct = view.findViewById(R.id.edit_inv_item);
-        productDateField = view.findViewById(R.id.inv_item_expiration_date_edit);
-        productQuantityField = view.findViewById(R.id.inv_item_quantity_edit);
-        productNameField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //This space intentionally left blank
-            }
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_edit_product, null);
+        inv_item_name_edit = v.findViewById(R.id.inv_item_name_edit);
+        inv_item_quantity_edit = v.findViewById(R.id.inv_item_quantity_edit);
+        inv_item_expiration_date_edit= v.findViewById(R.id.inv_item_expiration_date_edit);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                inventoryItem.setName(s.toString());
-            }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                //This one too
-            }
-        });
 
-        return view;
+        return new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.product_add_title)
+                .setView(v)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int year = inv_item_expiration_date_edit.getYear();
+                        int month =  inv_item_expiration_date_edit.getMonth();
+                        int day = inv_item_expiration_date_edit.getDayOfMonth();
+                        Date editDate = new GregorianCalendar(year,month,day).getTime();
+                        float quantity = Float.parseFloat(inv_item_quantity_edit.getText().toString());
+                        String name = inv_item_name_edit.getText().toString();
+                        sendResult(Activity.RESULT_OK, new InventoryItem(name,quantity,editDate));
+                    }
+                })
+                .create();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
-        super.onSaveInstanceState(savedInstanceState);
+    private void sendResult(int resultCode, InventoryItem inventoryItem){
+        if (getTargetFragment() == null){
+            return;
+        }
 
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_INV_ITEM_NAME,inventoryItem.getName());
+        intent.putExtra(EXTRA_INV_ITEM_DATE,inventoryItem.getDate());
+        intent.putExtra(EXTRA_INV_ITEM_QUANTITY,inventoryItem.getQuantity());
+
+        getTargetFragment().onActivityResult(getTargetRequestCode(),resultCode, intent);
     }
 }

@@ -2,6 +2,7 @@
     <string name="app_name">Crisis Fridge</string>
     <string name="inv_item_title">Enter a name for inventory item.</string>
     <string name="product_edit_title">Edit Product</string>
+    <string name="product_add_title">Add Product</string>
     <string name="inv_item_title_label">Product Name</string>
     <string name="inv_item_details_label">Details</string>
     <string name="inv_item_expiration_date_label">Expiration Date</string>

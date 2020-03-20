@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.crisisfridge.R;
 import com.example.crisisfridge.model.InventoryItem;
 import com.example.crisisfridge.model.InventoryItemI;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,8 +28,10 @@ import java.util.List;
 public class ProductListFragment extends Fragment {
 
     private RecyclerView invItemRecyclerView;
+    private FloatingActionButton addInvItemButton;
     private InvItemAdapter invItemAdapter;
-    private static final int REQUEST_INV_ITEM = 0;
+    private static final int REQUEST_INV_ITEM_EDIT = 0;
+    private static final int REQUEST_INV_ITEM_ADD = 1;
     private ArrayList<InventoryItemI> inventoryItems = new ArrayList<>();
 
     @Override
@@ -38,6 +41,14 @@ public class ProductListFragment extends Fragment {
 
         invItemRecyclerView = view.findViewById(R.id.crime_recycler_view);
         invItemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        addInvItemButton = view.findViewById(R.id.addInvItem);
+        addInvItemButton.setOnClickListener(v -> {
+            FragmentManager fragmentManager = getFragmentManager();
+            ProductAddFragment productAddFragment = ProductAddFragment.newInstance();
+            productAddFragment.setTargetFragment(ProductListFragment.this, REQUEST_INV_ITEM_ADD);
+            productAddFragment.show(fragmentManager,"Add Product");
+        });
 
         updateUI();
 
@@ -88,7 +99,7 @@ public class ProductListFragment extends Fragment {
                     getAdapterPosition()
             );
 
-            productEditFragment.setTargetFragment(ProductListFragment.this, REQUEST_INV_ITEM);
+            productEditFragment.setTargetFragment(ProductListFragment.this, REQUEST_INV_ITEM_EDIT);
             productEditFragment.show(fragmentManager,"Edit Product");
         }
 
@@ -137,19 +148,31 @@ public class ProductListFragment extends Fragment {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-
-        if (requestCode == REQUEST_INV_ITEM) {
-            String name = (String) data.getSerializableExtra(
-                    ProductEditFragment.EXTRA_INV_ITEM_NAME);
-            float quantity = (float) data.getSerializableExtra(
-                    ProductEditFragment.EXTRA_INV_ITEM_QUANTITY);
-            Date date = (Date) data.getSerializableExtra(
-                    ProductEditFragment.EXTRA_INV_ITEM_DATE);
-            int number = (int) data.getSerializableExtra(
-                    ProductEditFragment.EXTRA_INV_ITEM_NUMBER);
-            inventoryItems.set(number,new InventoryItem(name,quantity,date));
-            invItemAdapter.notifyDataSetChanged();
+        switch (requestCode){
+            case REQUEST_INV_ITEM_EDIT:
+                InventoryItem inventoryItemToEdit =  extractInvItemFromIntent(data);
+                int number = (int) data.getSerializableExtra(
+                        ProductEditFragment.EXTRA_INV_ITEM_NUMBER);
+                inventoryItems.set(number, inventoryItemToEdit);
+                invItemAdapter.notifyDataSetChanged();
+                break;
+            case REQUEST_INV_ITEM_ADD:
+                InventoryItem inventoryItemToAdd =  extractInvItemFromIntent(data);
+                inventoryItems.add(inventoryItemToAdd);
+                invItemAdapter.notifyDataSetChanged();
+                break;
+            default:
         }
 
+    }
+
+    private InventoryItem extractInvItemFromIntent(Intent data){
+        String name = (String) data.getSerializableExtra(
+                ProductEditFragment.EXTRA_INV_ITEM_NAME);
+        float quantity = (float) data.getSerializableExtra(
+                ProductEditFragment.EXTRA_INV_ITEM_QUANTITY);
+        Date date = (Date) data.getSerializableExtra(
+                ProductEditFragment.EXTRA_INV_ITEM_DATE);
+        return new InventoryItem(name,quantity,date);
     }
 }
