@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DatabaseMock {
 
-    static DatabaseMock singletonObject = null;
+    static DatabaseMock instance = null;
 
     private List<FridgeItemEntity> fridge;
     private List<ProductTypeEntity> productType;
@@ -23,10 +23,10 @@ public class DatabaseMock {
 
 
     static public DatabaseMock getInstance(){
-        if (singletonObject == null){
-            singletonObject = new DatabaseMock();
+        if (instance == null){
+            instance = new DatabaseMock();
         }
-        return singletonObject;
+        return instance;
     }
 
     private DatabaseMock() {
@@ -43,8 +43,13 @@ public class DatabaseMock {
                 new FridgeItemEntity(2, 3, 300, LocalDate.now().plusDays(7).toEpochDay())
         ));
 
-        recipe = new ArrayList<>(Arrays.asList());
-        recipeIngredients = new ArrayList<>(Arrays.asList());
+        recipe = new ArrayList<>(Arrays.asList(
+                new RecipeEntity(1, "jajecznica", "Jajecznica jaka jest każdy widzi.")
+        ));
+        recipeIngredients = new ArrayList<>(Arrays.asList(
+                new RecipeIngredientEntity(1, 1, 1, 2),
+                new RecipeIngredientEntity(2, 1, 2, 1)
+        ));
         shoppingList = new ArrayList<>();
     }
 

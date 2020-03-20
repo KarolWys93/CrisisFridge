@@ -17,7 +17,7 @@ import com.example.crisisfridge.data.model.dataModel.ShoppingList;
 )
 public class ShoppingListEntity implements ShoppingList {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private int productTypeId;
     private float quantity;

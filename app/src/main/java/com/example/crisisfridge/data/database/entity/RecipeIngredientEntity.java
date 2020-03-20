@@ -27,7 +27,7 @@ import com.example.crisisfridge.data.model.dataModel.RecipeIngredient;
 )
 public class RecipeIngredientEntity implements RecipeIngredient {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private int recipeId;
     private int productTypeId;

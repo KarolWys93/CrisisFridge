@@ -7,12 +7,20 @@
 package com.example.crisisfridge.data.database.dao;
 
 
+import com.example.crisisfridge.data.database.entity.ShoppingListEntity;
+
+import java.util.List;
+
 import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 
 
 @Dao
 public interface ShoppingListDao {
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAllShoppingListItem(List<ShoppingListEntity> shoppingListEntityList);
 
 }
 

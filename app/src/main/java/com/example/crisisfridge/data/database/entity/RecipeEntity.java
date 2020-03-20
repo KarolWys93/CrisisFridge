@@ -8,7 +8,7 @@ import com.example.crisisfridge.data.model.dataModel.Recipe;
 @Entity(tableName = "recipe")
 public class RecipeEntity implements Recipe {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
     private String description;

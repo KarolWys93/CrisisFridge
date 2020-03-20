@@ -16,7 +16,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.crisisfridge.data.database.dao.PantryDao;
+import com.example.crisisfridge.data.database.dao.FridgeDao;
 import com.example.crisisfridge.data.database.dao.RecipeIngredientsDao;
 import com.example.crisisfridge.data.database.dao.RecipeDao;
 import com.example.crisisfridge.data.database.dao.ProductTypeDao;
@@ -26,6 +26,7 @@ import com.example.crisisfridge.data.database.entity.ProductTypeEntity;
 import com.example.crisisfridge.data.database.entity.RecipeEntity;
 import com.example.crisisfridge.data.database.entity.RecipeIngredientEntity;
 import com.example.crisisfridge.data.database.entity.ShoppingListEntity;
+import com.example.crisisfridge.data.database.mocks.DatabaseMock;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -53,9 +54,13 @@ public abstract class LocalDB extends RoomDatabase {
 
 
     public abstract ProductTypeDao getProductTypeDao();
+
     public abstract RecipeDao getRecipeDao();
-    public abstract PantryDao getPantryDao();
+
+    public abstract FridgeDao getFridgeDao();
+
     public abstract RecipeIngredientsDao getRecipeIngredientsDao();
+
     public abstract ShoppingListDao getShoppingListDao();
 
     private static final String DB_NAME = "crisis_fridge";
@@ -73,7 +78,7 @@ public abstract class LocalDB extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static LocalDB createDatabaseInstance(Context context){
+    private static LocalDB createDatabaseInstance(Context context) {
         return Room.databaseBuilder(context.getApplicationContext(), LocalDB.class, DB_NAME)
                 .addCallback(new Callback() {
                     @Override
@@ -81,12 +86,18 @@ public abstract class LocalDB extends RoomDatabase {
                         super.onCreate(db);
                         Executors.newSingleThreadExecutor().execute(() -> {
 
-                            ProductTypeDao mapPointDao = INSTANCE.getProductTypeDao();
-                            PantryDao edgeDao = INSTANCE.getPantryDao();
+                            ProductTypeDao productTypeDao = INSTANCE.getProductTypeDao();
+                            FridgeDao fridgeDao = INSTANCE.getFridgeDao();
                             RecipeDao recipeDao = INSTANCE.getRecipeDao();
                             RecipeIngredientsDao recipeIngredientsDao = INSTANCE.getRecipeIngredientsDao();
                             ShoppingListDao shoppingListDao = INSTANCE.getShoppingListDao();
 
+                            DatabaseMock dbMock = DatabaseMock.getInstance();
+                            productTypeDao.insertAllProductType(dbMock.getProductType());
+                            fridgeDao.insertAllFridgeItem(dbMock.getFridge());
+                            recipeDao.insertAllRecipe(dbMock.getRecipe());
+                            recipeIngredientsDao.insertAllRecipeIngredients(dbMock.getRecipeIngredients());
+                            shoppingListDao.insertAllShoppingListItem(dbMock.getShoppingList());
                         });
                         Log.d(TAG, "onCreate: data loaded into database");
                     }

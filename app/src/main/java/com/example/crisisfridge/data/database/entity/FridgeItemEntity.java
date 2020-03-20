@@ -15,9 +15,9 @@ import com.example.crisisfridge.data.model.dataModel.FridgeItem;
                 onDelete = ForeignKey.CASCADE),
         indices = @Index("productId")
 )
-public class FridgeItemEntity implements FridgeItem {
+public class FridgeItemEntity {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private int productId;
     private float quantity;
@@ -30,22 +30,18 @@ public class FridgeItemEntity implements FridgeItem {
         this.expirationDate = expirationDate;
     }
 
-    @Override
     public int getId() {
         return id;
     }
 
-    @Override
     public int getProductId() {
         return productId;
     }
 
-    @Override
     public float getQuantity() {
         return quantity;
     }
 
-    @Override
     public long getExpirationDate() {
         return expirationDate;
     }

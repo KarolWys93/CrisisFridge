@@ -6,10 +6,17 @@
 
 package com.example.crisisfridge.data.database.dao;
 
+import com.example.crisisfridge.data.database.entity.RecipeIngredientEntity;
+
+import java.util.List;
+
 import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 
 @Dao
 public interface RecipeIngredientsDao {
 
-
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAllRecipeIngredients(List<RecipeIngredientEntity> recipeIngredientEntityList);
 }

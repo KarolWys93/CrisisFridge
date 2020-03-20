@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ec95daaf23897afc72551d02f14dfcd1",
+    "identityHash": "2f13b38d3213d52029db17549fcb9aef",
     "entities": [
       {
         "tableName": "fridge",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `productId` INTEGER NOT NULL, `quantity` REAL NOT NULL, `expirationDate` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`productId`) REFERENCES `product_type`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `productId` INTEGER NOT NULL, `quantity` REAL NOT NULL, `expirationDate` INTEGER NOT NULL, FOREIGN KEY(`productId`) REFERENCES `product_type`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -37,7 +37,7 @@
           "columnNames": [
             "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [
           {
@@ -91,7 +91,7 @@
       },
       {
         "tableName": "recipe",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `description` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -116,14 +116,14 @@
           "columnNames": [
             "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
       },
       {
         "tableName": "recipe_ingredients",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `recipeId` INTEGER NOT NULL, `productTypeId` INTEGER NOT NULL, `quantity` REAL NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`recipeId`) REFERENCES `recipe`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`productTypeId`) REFERENCES `product_type`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `recipeId` INTEGER NOT NULL, `productTypeId` INTEGER NOT NULL, `quantity` REAL NOT NULL, FOREIGN KEY(`recipeId`) REFERENCES `recipe`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`productTypeId`) REFERENCES `product_type`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -154,7 +154,7 @@
           "columnNames": [
             "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [
           {
@@ -201,7 +201,7 @@
       },
       {
         "tableName": "shopping_list",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `productTypeId` INTEGER NOT NULL, `quantity` REAL NOT NULL, `bought` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`productTypeId`) REFERENCES `product_type`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `productTypeId` INTEGER NOT NULL, `quantity` REAL NOT NULL, `bought` INTEGER NOT NULL, FOREIGN KEY(`productTypeId`) REFERENCES `product_type`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -232,7 +232,7 @@
           "columnNames": [
             "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [
           {
@@ -261,7 +261,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ec95daaf23897afc72551d02f14dfcd1\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2f13b38d3213d52029db17549fcb9aef\")"
     ]
   }
 }
