@@ -16,13 +16,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crisisfridge.R;
-import com.example.crisisfridge.model.InventoryItem;
-import com.example.crisisfridge.model.InventoryItemI;
+import com.example.crisisfridge.data.model.DatabaseMock;
+import com.example.crisisfridge.data.model.api.IFridgeItemRepository;
+import com.example.crisisfridge.data.model.api.IProductTypeRepository;
+import com.example.crisisfridge.data.model.api.IRepositoryFactory;
+import com.example.crisisfridge.data.model.api.RepositoryFactory;
+import com.example.crisisfridge.data.model.dataModel.FridgeItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ProductListFragment extends Fragment {
@@ -32,7 +37,10 @@ public class ProductListFragment extends Fragment {
     private InvItemAdapter invItemAdapter;
     private static final int REQUEST_INV_ITEM_EDIT = 0;
     private static final int REQUEST_INV_ITEM_ADD = 1;
-    private ArrayList<InventoryItemI> inventoryItems = new ArrayList<>();
+    private List<FridgeItem> fridgeItems = new ArrayList<>();
+    IRepositoryFactory repoFactory;
+    IFridgeItemRepository fridgeRepo;
+    IProductTypeRepository productTypeRepo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,21 +58,24 @@ public class ProductListFragment extends Fragment {
             productAddFragment.show(fragmentManager,"Add Product");
         });
 
+        repoFactory = new RepositoryFactory(DatabaseMock.getInstance());
+        fridgeRepo = repoFactory.getFridgeItemRepository();
+        productTypeRepo = repoFactory.getProductTypeRepository();
         updateUI();
 
         return view;
     }
 
     private void updateUI() {
-        inventoryItems.add(new InventoryItem("s",0.9f, new Date()));
-
-        invItemAdapter = new InvItemAdapter(inventoryItems);
+        fridgeItems = fridgeRepo.getFridgeItemList();
+        invItemAdapter = new InvItemAdapter(fridgeItems);
         invItemRecyclerView.setAdapter(invItemAdapter);
+        invItemAdapter.notifyDataSetChanged();
     }
 
     private class ProductHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private InventoryItemI inventoryItem;
+        private FridgeItem inventoryItem;
         private TextView nameTextView;
         private TextView dateTextView;
         private TextView quantityTextView;
@@ -78,12 +89,12 @@ public class ProductListFragment extends Fragment {
             dateTextView = itemView.findViewById(R.id.item_expiration_date);
         }
 
-        public void bind(InventoryItemI inventoryItem) {
+        public void bind(FridgeItem inventoryItem) {
             this.inventoryItem = inventoryItem;
             nameTextView.setText(this.inventoryItem.getName());
-            SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMM dd, yyyy");
-            Date date = this.inventoryItem.getDate();
-            String dateStr = formatter.format(date);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
+            LocalDate localDate = this.inventoryItem.getExpirationDate();
+            String dateStr = localDate.format(formatter);
             dateTextView.setText(dateStr);
             quantityTextView.setText(String.valueOf(inventoryItem.getQuantity()));
         }
@@ -95,7 +106,7 @@ public class ProductListFragment extends Fragment {
             ProductEditFragment productEditFragment = ProductEditFragment.newInstance(
                     inventoryItem.getName(),
                     inventoryItem.getQuantity(),
-                    inventoryItem.getDate(),
+                    inventoryItem.getExpirationDate(),
                     getAdapterPosition()
             );
 
@@ -107,9 +118,9 @@ public class ProductListFragment extends Fragment {
     }
 
     private class InvItemAdapter extends RecyclerView.Adapter<ProductHolder> {
-        private List<InventoryItemI> inventoryItemList;
+        private List<com.example.crisisfridge.data.model.dataModel.FridgeItem> inventoryItemList;
 
-        public InvItemAdapter(List<InventoryItemI> inventoryItemList) {
+        public InvItemAdapter(List<com.example.crisisfridge.data.model.dataModel.FridgeItem> inventoryItemList) {
             this.inventoryItemList = inventoryItemList;
         }
 
@@ -129,7 +140,7 @@ public class ProductListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
-            InventoryItemI inventoryItem = inventoryItemList.get(position);
+            FridgeItem inventoryItem = inventoryItemList.get(position);
             holder.bind(inventoryItem);
         }
 
@@ -148,31 +159,53 @@ public class ProductListFragment extends Fragment {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
+
+        int number = extractInvItemNumberFromIntent(data);
+        String name = extractInvItemNameFromIntent(data);
+        float quantity = extractInvItemQuantityFromIntent(data);
+        LocalDate localDate = extractInvItemExpDateFromIntent(data);
+
         switch (requestCode){
             case REQUEST_INV_ITEM_EDIT:
-                InventoryItem inventoryItemToEdit =  extractInvItemFromIntent(data);
-                int number = (int) data.getSerializableExtra(
-                        ProductEditFragment.EXTRA_INV_ITEM_NUMBER);
-                inventoryItems.set(number, inventoryItemToEdit);
-                invItemAdapter.notifyDataSetChanged();
+                FridgeItem fridgeItem = fridgeItems.get(number);
+                fridgeItem.setExpirationDate(localDate);
+                fridgeItem.setQuantity(quantity);
+                fridgeRepo.editItemFromFridge(fridgeItem);
                 break;
             case REQUEST_INV_ITEM_ADD:
-                InventoryItem inventoryItemToAdd =  extractInvItemFromIntent(data);
-                inventoryItems.add(inventoryItemToAdd);
-                invItemAdapter.notifyDataSetChanged();
+
+                fridgeRepo.addNewItemToFridge();
+                productTypeRepo.getProductTypeById();
+
                 break;
             default:
         }
-
+        updateUI();
     }
 
-    private InventoryItem extractInvItemFromIntent(Intent data){
+    private String extractInvItemNameFromIntent(Intent data){
         String name = (String) data.getSerializableExtra(
                 ProductEditFragment.EXTRA_INV_ITEM_NAME);
+        return name;
+    }
+
+    private float extractInvItemQuantityFromIntent(Intent data){
         float quantity = (float) data.getSerializableExtra(
                 ProductEditFragment.EXTRA_INV_ITEM_QUANTITY);
-        Date date = (Date) data.getSerializableExtra(
-                ProductEditFragment.EXTRA_INV_ITEM_DATE);
-        return new InventoryItem(name,quantity,date);
+        return quantity;
     }
+
+    private int extractInvItemNumberFromIntent(Intent data){
+        int number = (int) data.getSerializableExtra(
+                ProductEditFragment.EXTRA_INV_ITEM_NUMBER);
+        return number;
+    }
+
+    private LocalDate extractInvItemExpDateFromIntent(Intent data){
+        LocalDate date = (LocalDate) data.getSerializableExtra(
+                ProductEditFragment.EXTRA_INV_ITEM_EXP_DATE);
+        return date;
+    }
+
+
 }

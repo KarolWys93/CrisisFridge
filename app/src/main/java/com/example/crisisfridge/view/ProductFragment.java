@@ -29,7 +29,7 @@ public abstract class ProductFragment extends DialogFragment {
             "com.example.crisisfridge.inv_item_name";
     public static final String EXTRA_INV_ITEM_QUANTITY =
             "com.example.crisisfridge.inv_item_quantity";
-    public static final String EXTRA_INV_ITEM_DATE =
+    public static final String EXTRA_INV_ITEM_EXP_DATE =
             "com.example.crisisfridge.inv_item_date";
     public static final String EXTRA_INV_ITEM_NUMBER =
             "com.example.crisisfridge.inv_item_number";
