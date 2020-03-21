@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:id="@+id/imageRecipe"
+        android:layout_width="110dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitXY"
+        android:src="@drawable/recipe_default48dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textRecipeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/imageRecipe"
+        tools:text="Bacon Pancakes"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textPreparationTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/imageRecipe"
+        app:layout_constraintTop_toBottomOf="@id/textRecipeName"
+        tools:text="Time: 30 min" />
+
+    <TextView
+        android:id="@+id/textRecipeDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/imageRecipe"
+        app:layout_constraintTop_toBottomOf="@id/textPreparationTime"
+        tools:text="Breakfast meal" />
+
+    <ImageView
+        android:id="@+id/isPreaparable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="249dp"
+        android:layout_marginTop="110dp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitXY"
+        android:src="@drawable/ok_sign_48dp"
+        app:layout_constraintStart_toEndOf="@+id/imageRecipe"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

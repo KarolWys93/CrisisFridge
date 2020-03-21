@@ -1,6 +1,8 @@
 package com.example.crisisfridge;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 
@@ -15,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fragmentsSetup();
 
         bottomNavigation = findViewById(R.id.navigationView);
         bottomNavigation.setOnNavigationItemSelectedListener(menuItem -> {
@@ -32,6 +35,16 @@ public class MainActivity extends AppCompatActivity {
             return false;
 
         });
+
+    }
+
+    public void fragmentsSetup(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragmentContainer);
+        if (fragment==null){
+            fragment = new RecipiesFragment();
+            fragmentManager.beginTransaction().add(R.id.fragmentContainer,fragment).commit();
+        }
 
     }
 }
