@@ -22,6 +22,7 @@ import com.example.crisisfridge.data.model.api.IProductTypeRepository;
 import com.example.crisisfridge.data.model.api.IRepositoryFactory;
 import com.example.crisisfridge.data.model.api.RepositoryFactory;
 import com.example.crisisfridge.data.model.dataModel.FridgeItem;
+import com.example.crisisfridge.data.model.dataModel.ProductType;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
@@ -53,7 +54,8 @@ public class ProductListFragment extends Fragment {
         addInvItemButton = view.findViewById(R.id.addInvItem);
         addInvItemButton.setOnClickListener(v -> {
             FragmentManager fragmentManager = getFragmentManager();
-            ProductAddFragment productAddFragment = ProductAddFragment.newInstance();
+            ProductAddFragment productAddFragment = ProductAddFragment
+                    .newInstance(productTypeRepo.getAllProductType());
             productAddFragment.setTargetFragment(ProductListFragment.this, REQUEST_INV_ITEM_ADD);
             productAddFragment.show(fragmentManager,"Add Product");
         });
@@ -161,7 +163,6 @@ public class ProductListFragment extends Fragment {
         }
 
         int number = extractInvItemNumberFromIntent(data);
-        String name = extractInvItemNameFromIntent(data);
         float quantity = extractInvItemQuantityFromIntent(data);
         LocalDate localDate = extractInvItemExpDateFromIntent(data);
 
@@ -173,21 +174,15 @@ public class ProductListFragment extends Fragment {
                 fridgeRepo.editItemFromFridge(fridgeItem);
                 break;
             case REQUEST_INV_ITEM_ADD:
-
-                fridgeRepo.addNewItemToFridge();
-                productTypeRepo.getProductTypeById();
-
+                ProductType productType = productTypeRepo.getProductTypeById(number);
+                fridgeRepo.addNewItemToFridge(productType,quantity,localDate);
                 break;
             default:
         }
         updateUI();
     }
 
-    private String extractInvItemNameFromIntent(Intent data){
-        String name = (String) data.getSerializableExtra(
-                ProductEditFragment.EXTRA_INV_ITEM_NAME);
-        return name;
-    }
+
 
     private float extractInvItemQuantityFromIntent(Intent data){
         float quantity = (float) data.getSerializableExtra(
