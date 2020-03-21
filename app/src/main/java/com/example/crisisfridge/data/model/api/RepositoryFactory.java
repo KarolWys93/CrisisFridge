@@ -12,11 +12,16 @@ public class RepositoryFactory implements IRepositoryFactory {
 
     @Override
     public IProductTypeRepository getProductTypeRepository() {
-        return new ProductTypeRepository(databaseMock);
+        return ProductTypeRepository.getInstance(databaseMock);
     }
 
     @Override
     public IFridgeItemRepository getFridgeItemRepository() {
-        return new FridgeItemRepository(databaseMock);
+        return FridgeItemRepository.getInstance(databaseMock);
+    }
+
+    @Override
+    public IRecipeRepository getRecipeRepository() {
+        return RecipeRepository.getInstance(databaseMock);
     }
 }

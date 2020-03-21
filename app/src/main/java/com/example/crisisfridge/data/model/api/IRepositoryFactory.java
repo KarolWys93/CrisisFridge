@@ -6,4 +6,6 @@ public interface IRepositoryFactory {
 
     IFridgeItemRepository getFridgeItemRepository();
 
+    IRecipeRepository getRecipeRepository();
+
 }

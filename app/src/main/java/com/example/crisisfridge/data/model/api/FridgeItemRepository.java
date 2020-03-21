@@ -14,19 +14,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 
 public class FridgeItemRepository implements IFridgeItemRepository {
 
     private final String TAG = "FridgeItemRepository";
-
+    static private FridgeItemRepository instance = null;
 
     private Map<Integer, FridgeItemEntity> fridgeItemEntityMap;
     private IProductTypeRepository productTypeRepository;
 
 
-    FridgeItemRepository(DatabaseMock databaseMock) {
+    static public FridgeItemRepository getInstance(DatabaseMock databaseMock) {
+        if (instance == null) {
+            instance = new FridgeItemRepository(databaseMock);
+        }
+        return instance;
+    }
+
+
+    private FridgeItemRepository(DatabaseMock databaseMock) {
         fridgeItemEntityMap = new HashMap<>();
         for (FridgeItemEntity entity : databaseMock.getFridge()) {
             fridgeItemEntityMap.put(entity.getId(), entity);

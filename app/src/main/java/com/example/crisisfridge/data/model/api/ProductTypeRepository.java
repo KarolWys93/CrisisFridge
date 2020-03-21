@@ -12,9 +12,18 @@ import java.util.Map;
 
 public class ProductTypeRepository implements IProductTypeRepository {
 
+    static private ProductTypeRepository instance = null;
+
     private Map<Integer, ProductTypeEntity> productTypeEntityMap;
 
-    ProductTypeRepository(DatabaseMock database) {
+    static ProductTypeRepository getInstance(DatabaseMock databaseMock) {
+        if (instance == null) {
+            instance = new ProductTypeRepository(databaseMock);
+        }
+        return instance;
+    }
+
+    private ProductTypeRepository(DatabaseMock database) {
         productTypeEntityMap = new HashMap<>();
         for (ProductTypeEntity entity : database.getProductType()) {
             productTypeEntityMap.put(entity.getId(), entity);

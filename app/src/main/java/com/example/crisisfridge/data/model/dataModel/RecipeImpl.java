@@ -11,7 +11,8 @@ public class RecipeImpl implements Recipe {
     private String description;
     private Map<ProductType, Float> ingredientMap;
 
-    public RecipeImpl(String name, String description, Map<ProductType, Float> ingredientMap) {
+    public RecipeImpl(int id, String name, String description, Map<ProductType, Float> ingredientMap) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.ingredientMap = ingredientMap;

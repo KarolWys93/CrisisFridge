@@ -19,7 +19,9 @@ public interface IRecipeRepository {
 
     void useRecipe(Recipe recipe, int portions);
 
-    List<Boolean> isMissingIngredient(RecipeIngredient recipeIngredient);
+    List<Boolean> isEnoughIngredient(List<RecipeIngredient> recipeIngredients, int portions);
+
+    Recipe addRecipe(String name, String description);
 
     void updateRecipe(Recipe recipe);
 
