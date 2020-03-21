@@ -8,6 +8,8 @@ import androidx.lifecycle.LiveData;
 
 public interface IProductTypeRepository {
 
+    List<ProductType> getAllProductType();
+
     List<ProductType> getProductTypeListByName(String name, int limit);
 
     ProductType getProductTypeById(int productTypeId);
