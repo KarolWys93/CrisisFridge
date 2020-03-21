@@ -10,9 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
-
 public class ProductTypeRepository implements IProductTypeRepository {
 
     private Map<Integer, ProductTypeEntity> productTypeEntityMap;
@@ -25,11 +22,20 @@ public class ProductTypeRepository implements IProductTypeRepository {
     }
 
     @Override
+    public List<ProductType> getAllProductType() {
+        List<ProductType> resultList = new ArrayList<>();
+        for (ProductTypeEntity entity : productTypeEntityMap.values()) {
+            resultList.add(new ProductTypeImpl(entity));
+        }
+        return resultList;
+    }
+
+    @Override
     public List<ProductType> getProductTypeListByName(String name, int limit) {
         List<ProductType> resultList = new ArrayList<>();
         int found = 0;
-        for (ProductTypeEntity entity:productTypeEntityMap.values()) {
-            if (entity.getName().contains(name)){
+        for (ProductTypeEntity entity : productTypeEntityMap.values()) {
+            if (entity.getName().contains(name)) {
                 resultList.add(new ProductTypeImpl(entity));
                 found++;
             }
