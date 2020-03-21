@@ -9,11 +9,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -37,7 +35,6 @@ public class ProductAddFragment extends ProductFragment {
     private EditText inv_item_quantity_edit;
     private DatePicker inv_item_expiration_date_edit;
     private static List<ProductType> productTypes;
-    private String name;
 
     public static ProductAddFragment newInstance(List<ProductType> productTypeList) {
         ProductAddFragment fragment = new ProductAddFragment();
@@ -92,11 +89,10 @@ public class ProductAddFragment extends ProductFragment {
     }
 
 
-
-    private void sendResult(int resultCode, Intent intent){
-        if (getTargetFragment() == null){
+    private void sendResult(int resultCode, Intent intent) {
+        if (getTargetFragment() == null) {
             return;
         }
-        getTargetFragment().onActivityResult(getTargetRequestCode(),resultCode, intent);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }
 }

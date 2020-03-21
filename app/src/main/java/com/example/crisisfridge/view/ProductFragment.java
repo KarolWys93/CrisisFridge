@@ -1,15 +1,13 @@
 package com.example.crisisfridge.view;
 
-import android.os.Bundle;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 
-import java.util.Date;
-
 public abstract class ProductFragment extends DialogFragment {
-    protected EditText inv_item_name;
+    protected TextView inv_item_name;
     protected EditText inv_item_quantity;
     protected DatePicker inv_item_expiration_date;
 

@@ -25,7 +25,6 @@ import com.example.crisisfridge.data.model.dataModel.FridgeItem;
 import com.example.crisisfridge.data.model.dataModel.ProductType;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -39,9 +38,9 @@ public class ProductListFragment extends Fragment {
     private static final int REQUEST_INV_ITEM_EDIT = 0;
     private static final int REQUEST_INV_ITEM_ADD = 1;
     private List<FridgeItem> fridgeItems = new ArrayList<>();
-    IRepositoryFactory repoFactory;
-    IFridgeItemRepository fridgeRepo;
-    IProductTypeRepository productTypeRepo;
+    private IRepositoryFactory repoFactory;
+    private IFridgeItemRepository fridgeRepo;
+    private IProductTypeRepository productTypeRepo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +56,7 @@ public class ProductListFragment extends Fragment {
             ProductAddFragment productAddFragment = ProductAddFragment
                     .newInstance(productTypeRepo.getAllProductType());
             productAddFragment.setTargetFragment(ProductListFragment.this, REQUEST_INV_ITEM_ADD);
-            productAddFragment.show(fragmentManager,"Add Product");
+            productAddFragment.show(fragmentManager, "Add Product");
         });
 
         repoFactory = new RepositoryFactory(DatabaseMock.getInstance());
@@ -113,7 +112,7 @@ public class ProductListFragment extends Fragment {
             );
 
             productEditFragment.setTargetFragment(ProductListFragment.this, REQUEST_INV_ITEM_EDIT);
-            productEditFragment.show(fragmentManager,"Edit Product");
+            productEditFragment.show(fragmentManager, "Edit Product");
         }
 
 
@@ -147,8 +146,6 @@ public class ProductListFragment extends Fragment {
         }
 
 
-
-
         @Override
         public int getItemCount() {
             return inventoryItemList.size();
@@ -166,7 +163,7 @@ public class ProductListFragment extends Fragment {
         float quantity = extractInvItemQuantityFromIntent(data);
         LocalDate localDate = extractInvItemExpDateFromIntent(data);
 
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_INV_ITEM_EDIT:
                 FridgeItem fridgeItem = fridgeItems.get(number);
                 fridgeItem.setExpirationDate(localDate);
@@ -175,7 +172,7 @@ public class ProductListFragment extends Fragment {
                 break;
             case REQUEST_INV_ITEM_ADD:
                 ProductType productType = productTypeRepo.getProductTypeById(number);
-                fridgeRepo.addNewItemToFridge(productType,quantity,localDate);
+                fridgeRepo.addNewItemToFridge(productType, quantity, localDate);
                 break;
             default:
         }
@@ -183,23 +180,19 @@ public class ProductListFragment extends Fragment {
     }
 
 
-
-    private float extractInvItemQuantityFromIntent(Intent data){
-        float quantity = (float) data.getSerializableExtra(
+    private float extractInvItemQuantityFromIntent(Intent data) {
+        return (float) data.getSerializableExtra(
                 ProductEditFragment.EXTRA_INV_ITEM_QUANTITY);
-        return quantity;
     }
 
-    private int extractInvItemNumberFromIntent(Intent data){
-        int number = (int) data.getSerializableExtra(
+    private int extractInvItemNumberFromIntent(Intent data) {
+        return (int) data.getSerializableExtra(
                 ProductEditFragment.EXTRA_INV_ITEM_NUMBER);
-        return number;
     }
 
-    private LocalDate extractInvItemExpDateFromIntent(Intent data){
-        LocalDate date = (LocalDate) data.getSerializableExtra(
+    private LocalDate extractInvItemExpDateFromIntent(Intent data) {
+        return (LocalDate) data.getSerializableExtra(
                 ProductEditFragment.EXTRA_INV_ITEM_EXP_DATE);
-        return date;
     }
 
 

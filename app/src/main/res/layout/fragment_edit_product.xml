@@ -10,11 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/inv_item_title_label"/>
-    <EditText
+    <TextView
         android:id="@+id/inv_item_name_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/inv_item_title"/>
+        android:hint="@string/inv_item_title"
+        android:layout_margin="8dp"
+        android:textSize="18dp"/>
     <TextView
         style="?android:listSeparatorTextViewStyle"
         android:layout_width="match_parent"
